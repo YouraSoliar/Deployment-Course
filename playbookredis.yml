@@ -1,0 +1,26 @@
+---
+- name: PlayBook
+  hosts: redis
+  become: true
+  gather_facts: false
+  tasks:
+  - name: Update
+    apt: update_cache=yes   
+  
+  - name: Installing Redis
+    apt: name=redis-server state=latest
+    
+  - command:
+      cmd: sed -i 's/bind 127.0.0.1 ::1/bind 0.0.0.0/g' /etc/redis/redis.conf
+    
+  # - service:
+  #     name: redis-server
+  #     state: started
+  #     enabled: yes
+    
+  # - systemd: daemon_reload=yes
+
+  - name: Restart redis
+    service: name=redis state=restarted enabled=yes
+
+

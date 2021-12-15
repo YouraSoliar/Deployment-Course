@@ -1,0 +1,11 @@
+lab_3/db.sqlite3
+lab_3/server.log
+__pycache__
+.pytest_cache
+lab_3/server.log
+terraform
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars
+.terraform
+.terraform.lock.hcl

@@ -1,6 +1,6 @@
 ---
 - name: PlayBook
-  hosts: server1,server2
+  hosts: server1
   become: true
   gather_facts: false
   tasks:

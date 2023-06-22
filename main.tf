@@ -64,17 +64,6 @@ resource "azurerm_public_ip" "ipaddressone" {
   }
 }
 
-resource "azurerm_public_ip" "ipaddresstwo" {
-  name                = "twoPublicIp"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  allocation_method   = "Static"
-
-  tags = {
-    environment = "Production"
-  }
-}
-
 ## INTERFACES
 resource "azurerm_network_interface" "interfaceone" {
   name                = "interfaceOne"
@@ -88,21 +77,6 @@ resource "azurerm_network_interface" "interfaceone" {
     
     private_ip_address = "10.0.2.4"
     public_ip_address_id = azurerm_public_ip.ipaddressone.id
-  }
-}
-
-resource "azurerm_network_interface" "interfacetwo" {
-  name                = "interfaceTwo"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name 
-
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.subnet.id 
-    private_ip_address_allocation = "Static"
-    
-    private_ip_address = "10.0.2.5"
-    public_ip_address_id          = azurerm_public_ip.ipaddresstwo.id
   }
 }
 
@@ -227,32 +201,6 @@ resource "azurerm_linux_virtual_machine" "vmyuriione" {
   }
 }
 
-resource "azurerm_linux_virtual_machine" "vmyuriitwo" {
-  name                = "VMYuriiTwo"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  size                = "Standard_F1"
-  admin_username      = var.SERVER_USERNAME
-  admin_password      = var.SERVER_PWD
-  disable_password_authentication = false
-  availability_set_id = azurerm_availability_set.DemoAset.id 
-  network_interface_ids = [
-    azurerm_network_interface.interfacetwo.id
-  ]
-
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-  }
-
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
-}
-
 ## VIRTUAL BALANCER && REDIS
 resource "azurerm_linux_virtual_machine" "vmyuriibalancer" {
   name                = "VMYuriiBalancer"
@@ -311,10 +259,6 @@ resource "azurerm_linux_virtual_machine" "vmyuriiredis" {
 ## OUTPUT
 output "public_ip_server_1" {
   value = "${azurerm_public_ip.ipaddressone.ip_address}"
-}
-
-output "public_ip_server_2" {
-  value = "${azurerm_public_ip.ipaddresstwo.ip_address}"
 }
 
 output "public_ip_address_redis" {

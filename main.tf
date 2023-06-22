@@ -15,6 +15,11 @@ resource "azurerm_availability_set" "DemoAset" {
   resource_group_name = azurerm_resource_group.rg.name
 }
 
+resource "tls_private_key" "example_ssh" {
+    algorithm = "RSA"
+    rsa_bits = 4096
+}
+
 ## VIRTUAL NETWORK
 resource "azurerm_virtual_network" "vnet" {
   name                = "vNet"
@@ -199,6 +204,11 @@ resource "azurerm_linux_virtual_machine" "vmyuriione" {
     sku       = "18.04-LTS"
     version   = "latest"
   }
+
+  admin_ssh_key {
+    username = var.SERVER_USERNAME
+    public_key = tls_private_key.example_ssh.public_key_openssh
+  }
 }
 
 ## VIRTUAL BALANCER && REDIS
@@ -226,6 +236,11 @@ resource "azurerm_linux_virtual_machine" "vmyuriibalancer" {
     sku       = "18.04-LTS"
     version   = "latest"
   }
+
+  admin_ssh_key {
+    username = var.SERVER_USERNAME
+    public_key = tls_private_key.example_ssh.public_key_openssh
+  }
 }
 
 resource "azurerm_linux_virtual_machine" "vmyuriiredis" {
@@ -252,6 +267,11 @@ resource "azurerm_linux_virtual_machine" "vmyuriiredis" {
     sku       = "18.04-LTS"
     version   = "latest"
   }
+
+  admin_ssh_key {
+    username = var.SERVER_USERNAME
+    public_key = tls_private_key.example_ssh.public_key_openssh
+  }
 }
 
 
@@ -269,3 +289,7 @@ output "public_ip_address_balancer" {
   value = "${azurerm_public_ip.ipaddressbalancer.ip_address}"
 }
 
+output "private_ssh_key" {
+  sensitive = true
+  value = "${tls_private_key.example_ssh.private_key_openssh}"
+}

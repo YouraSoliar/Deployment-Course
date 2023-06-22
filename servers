@@ -1,7 +1,7 @@
 [servers]
-server1 ansible_host="{{ public_ip_server_1 }}" ansible_connection=ssh  ansible_ssh_user="{{ lookup('env', 'TF_VAR_SERVER_USERNAME') }}" ansible_ssh_pass="{{ lookup('env', 'TF_VAR_SERVER_PWD') }}"
-balancer ansible_host="{{ public_ip_address_balancer }}" ansible_connection=ssh  ansible_ssh_user="{{ lookup('env', 'TF_VAR_SERVER_USERNAME') }}" ansible_ssh_pass="{{ lookup('env', 'TF_VAR_SERVER_PWD') }}"
-redis ansible_host="{{ public_ip_address_redis }}" ansible_connection=ssh  ansible_ssh_user="{{ lookup('env', 'TF_VAR_SERVER_USERNAME') }}" ansible_ssh_pass="{{ lookup('env', 'TF_VAR_SERVER_PWD') }}"
+server1 ansible_host="{{ public_ip_server_1 }}" ansible_connection=ssh  ansible_ssh_user="{{ lookup('env', 'TF_VAR_SERVER_USERNAME') }}" ansible_ssh_private_key_file="id_rsa"
+balancer ansible_host="{{ public_ip_address_balancer }}" ansible_connection=ssh  ansible_ssh_user="{{ lookup('env', 'TF_VAR_SERVER_USERNAME') }}" ansible_ssh_private_key_file="id_rsa"
+redis ansible_host="{{ public_ip_address_redis }}" ansible_connection=ssh  ansible_ssh_user="{{ lookup('env', 'TF_VAR_SERVER_USERNAME') }}" ansible_ssh_private_key_file="id_rsa"
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3

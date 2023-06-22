@@ -13,6 +13,11 @@ terraform init && terraform plan && terraform apply
 
 # test if all ok
 # -e is --extra-vars
+
+terraform output -raw private_ssh_key > id_rsa
+
+chmod 700 id_rsa
+
 ansible -i servers -m ping all -e "$(terraform output | sed s/[\"\ ]//g)"
 
 ansible-playbook -i servers playbook.yml -e "$(terraform output | sed s/[\"\ ]//g)"
@@ -28,4 +33,7 @@ terraform output public_ip_address_balancer
 
 # sudo docker pull -a  yourasoliar/embedded
 
+python3 tracker.py  $(terraform output -raw public_ip_server_1):5000 \
+                    $(terraform output -raw public_ip_address_balancer):80 \
+                    --interval 10
 
